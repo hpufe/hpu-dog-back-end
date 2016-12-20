@@ -6,6 +6,7 @@ var superagent = require('superagent');
 var charset = require('superagent-charset');
 var cheerio = require('cheerio');
 var eventproxy = require('eventproxy');
+var async = require('async');
 
 var baseUrl = 'http://news.hpu.edu.cn/SiteFiles/Inner/dynamic/output.aspx?publishmentSystemID=543&word=';
 var pars = [
@@ -31,39 +32,58 @@ charset(superagent);
 
 router.get('/', function(req, res, next) {
 
-  ep.after('news_list', pars.length, function(newsList) {
-    var urlList = newsList.map(function(list) {
-      var items = [];
-      var $ = cheerio.load(list);
-      $('a').each(function(i, elem) {
+  // ep.after('news_list', pars.length, function(newsList) {
+  //   var urlList = newsList.map(function(list) {
+  //     var items = [];
+  //     var $ = cheerio.load(list);
+  //     $('a').each(function(i, elem) {
+  //
+  //       if ($(this).attr('onclick') === undefined) {
+  //         items.push(
+  //           {
+  //             title: $(this).text(),
+  //             url: $(this).attr('href')
+  //           });
+  //       }
+  //     });
+  //     console.log('新闻链接获取成功！');
+  //     return items;
+  //   })
+  //
+  //   res.send(urlList);
+  // });
+  //
+  // pars.forEach(function(par) {
+  //   superagent
+  //     .post(baseUrl)
+  //     .send(querystring.parse(par))
+  //     .set(headers)
+  //     .end(function(err, sres) {
+  //       if (err) {
+  //         return next(err);
+  //       }
+  //       console.log('列表获取成功!');
+  //       ep.emit('news_list', sres.text);
+  //     })
+  // });
 
-        if ($(this).attr('onclick') === undefined) {
-          items.push(
-            {
-              title: $(this).text(),
-              url: $(this).attr('href')
-            });
-        }
-      });
-      console.log('新闻链接获取成功！');
-      return items;
-    })
-
-    res.send(urlList);
-  });
-
-  pars.forEach(function(par) {
+  async.map(pars, function(item, cb){
     superagent
       .post(baseUrl)
-      .send(querystring.parse(par))
+      .send(querystring.parse(item))
       .set(headers)
       .end(function(err, sres) {
         if (err) {
           return next(err);
         }
-        console.log('列表获取成功!');
-        ep.emit('news_list', sres.text);
+        cb(null, sres.text);
+        console.log('ok!');
       })
+  }, function(err, result){
+    if (err) {
+      return next(err);
+    }
+    res.send(result);
   });
 
 });

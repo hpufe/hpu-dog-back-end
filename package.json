@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "async": "^2.1.4",
     "body-parser": "~1.15.2",
     "cheerio": "^0.22.0",
     "cookie-parser": "~1.4.3",
@@ -14,7 +15,9 @@
     "express": "~4.14.0",
     "iconv-lite": "^0.4.15",
     "jade": "~1.11.0",
+    "mongoose": "^4.7.3",
     "morgan": "~1.7.0",
+    "pm2": "^2.2.2",
     "serve-favicon": "~2.3.0",
     "superagent": "^3.3.0",
     "superagent-charset": "^1.1.1"
