@@ -5,7 +5,6 @@ var querystring = require('querystring');
 var superagent = require('superagent');
 var charset = require('superagent-charset');
 var cheerio = require('cheerio');
-var eventproxy = require('eventproxy');
 var async = require('async');
 
 var baseUrl = 'http://news.hpu.edu.cn/SiteFiles/Inner/dynamic/output.aspx?publishmentSystemID=543&word=';
@@ -27,45 +26,9 @@ var headers = {
     'Accept-Language': 'en-US,en;q=0.8,zh;q=0.6'
 };
 
-var ep = new eventproxy();
 charset(superagent);
 
 router.get('/', function(req, res, next) {
-
-  // ep.after('news_list', pars.length, function(newsList) {
-  //   var urlList = newsList.map(function(list) {
-  //     var items = [];
-  //     var $ = cheerio.load(list);
-  //     $('a').each(function(i, elem) {
-  //
-  //       if ($(this).attr('onclick') === undefined) {
-  //         items.push(
-  //           {
-  //             title: $(this).text(),
-  //             url: $(this).attr('href')
-  //           });
-  //       }
-  //     });
-  //     console.log('新闻链接获取成功！');
-  //     return items;
-  //   })
-  //
-  //   res.send(urlList);
-  // });
-  //
-  // pars.forEach(function(par) {
-  //   superagent
-  //     .post(baseUrl)
-  //     .send(querystring.parse(par))
-  //     .set(headers)
-  //     .end(function(err, sres) {
-  //       if (err) {
-  //         return next(err);
-  //       }
-  //       console.log('列表获取成功!');
-  //       ep.emit('news_list', sres.text);
-  //     })
-  // });
 
   async.map(pars, function(item, cb){
     superagent
@@ -83,7 +46,32 @@ router.get('/', function(req, res, next) {
     if (err) {
       return next(err);
     }
-    res.send(result);
+    // var urls = result.map(function(html){
+    //   var item = [];
+    //   var $ = cheerio.load(html);
+    //   $('a').each(function(i, elem) {
+    //     if ($(this).attr('onclick') === undefined) {
+    //       item.push($(this).attr('href'));
+    //     }
+    //   });
+    //   return item;
+    // });
+    var urls = [];
+    async.each(result, function(item, cb) {
+      var $ = cheerio.load(item);
+      $('a').each(function(i, elem){
+        if ($(this).attr('onclick') === undefined) {
+          urls.push($(this).attr('href'));
+        }
+      });
+      cb(null);
+    }, function(err) {
+      if (err) {
+        console.log('err');
+        return next(err);
+      }
+    });
+    res.send(urls);
   });
 
 });
