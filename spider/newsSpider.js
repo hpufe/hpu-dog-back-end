@@ -72,7 +72,7 @@ router.get('/', function(req, res, next) {
           if (err) {
             return next(err);
           }
-          cb(null, sres.text);
+          cb(null, [sres.text, item]);
           console.log('content ok!');
         })
     }, function(err, result) {
@@ -82,7 +82,7 @@ router.get('/', function(req, res, next) {
 
       async.each(result, function(item, cb) {
 
-        var $ = cheerio.load(item);
+        var $ = cheerio.load(item[0]);
         var html = $('td', '#body').filter(function(i, ele) {
           return $(this).attr('align') === 'left';
         });
@@ -93,7 +93,7 @@ router.get('/', function(req, res, next) {
             tag: $('a', html).eq(1).text(),
             content: $('#NewsContent', html).html(),
             cover: $('img', html).attr('src') === undefined ? 'http://www.hpu.edu.cn/www/upload/2015/5/2295835501.jpg' : $('img', html).attr('src'),
-            url: 'url'
+            url: item[1]
           }
         );
 
