@@ -26,6 +26,14 @@ var spiderConfig = {
         'Accept-Encoding': 'gzip, deflate',
         'Accept-Language': 'en-US,en;q=0.8,zh;q=0.6'
     }
+  },
+  /**
+   * 后勤
+   * @type {Object}
+   */
+  logistics: {
+    baseUrl: 'http://repair.hpu.edu.cn/',
+    url: 'http://repair.hpu.edu.cn/dsh/Pchome/GetNewsListbySub?RowCount=0&PageIndex=1&PageSize=15&LgType=1&PID=01'
   }
 
 }
