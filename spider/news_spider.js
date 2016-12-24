@@ -1,10 +1,8 @@
-var express = require('express');
-var router = express.Router();
-// var mongoose = require('mongoose');
-// mongoose.connect('mongodb://127.0.0.1:27017/hpuDog');
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://127.0.0.1:27017/hpuDog');
 
 var spiderConfig = require('./config.spider');
-// var News = require('./models/newsModel.js');
+var News = require('./models/news_model');
 var querystring = require('querystring');
 var superagent = require('superagent');
 var charset = require('superagent-charset');
@@ -93,34 +91,32 @@ var saveItem = function(item, cb) {
   var tag = $('a', html).eq(1).text();
   var content = $('#NewsContent', html).html();
   var cover = $('img', html).attr('src') === undefined ? 'http://www.hpu.edu.cn/www/upload/2015/5/2295835501.jpg' : $('img', html).attr('src');
-  var url = item[1];
+  var link = item[1];
 
   news.push(
     {
-      title: $('.NewsTitle', html).text(),
-      time: ($('tr', html).eq(2).text()).match(/\d{4}(-)\d{2}\1\d{2}/)[0],
-      tag: $('a', html).eq(1).text(),
-      content: $('#NewsContent', html).html(),
-      cover: $('img', html).attr('src') === undefined ? 'http://www.hpu.edu.cn/www/upload/2015/5/2295835501.jpg' : $('img', html).attr('src'),
-      url: item[1]
+      title: title,
+      time: time,
+      tag: tag,
+      content: content,
+      cover: cover,
+      url: link
     }
   );
 
-  // console.log('connecting...');
-  // var n = new News({
-  //   title: title,
-  //   time: time,
-  //   tag: tag,
-  //   content: content,
-  //   cover: cover,
-  //   url: link
-  // }).save();
-  // console.log('save ok!');
+  var n = new News({
+    title: title,
+    time: time,
+    tag: tag,
+    content: content,
+    cover: cover,
+    url: link
+  }).save();
 
   cb(null);
 }
 
-router.get('/', function(req, res, next) {
+var getNews = function(req, res, next) {
 
   async.map(spiderConfig.news.pars, function(item, cb){
     getHtml(item, cb);
@@ -139,6 +135,7 @@ router.get('/', function(req, res, next) {
 
       async.each(result, function(item, cb) {
         saveItem(item, cb);
+        console.log('saved ok!');
       }, function(err) {
         if (err) {
           return next(err);
@@ -149,6 +146,6 @@ router.get('/', function(req, res, next) {
     });
   });
 
-});
+};
 
-module.exports = router;
+exports.getNews = getNews;
