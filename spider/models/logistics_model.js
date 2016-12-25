@@ -2,16 +2,16 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 /**
- * 新闻信息
+ * 后勤服务
  * @type {Schema}
- * title　标题
- * time　发布时间
- * tag　类别
- * content　内容
- * cover　封面
- * url　链接
+ * title 标题
+ * time 发布时间
+ * tag 分类
+ * content 内容
+ * cover 封面
+ * url 链接
  */
-var newsSchema = new Schema({
+var logisticsSchema = new Schema({
   title: String,
   time: {type: Date, default: Date.now()},
   tag: String,
@@ -20,6 +20,6 @@ var newsSchema = new Schema({
   url: {type: String, unique: true}
 });
 
-var News = mongoose.model('News', newsSchema);
+var Logistics = mongoose.model('Logistics', logisticsSchema);
 
-module.exports = News;
+module.exports = Logistics;

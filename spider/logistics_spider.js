@@ -1,3 +1,6 @@
+var mongoose = require('mongoose');
+var Logistics = require('./models/logistics_model');
+
 var spiderConfig = require('./config.spider');
 var superagent = require('superagent');
 var cheerio = require('cheerio');
@@ -36,16 +39,31 @@ var getItems = function(req, res, next) {
 
         async.each(result, function(item, cb) {
           var $ = cheerio.load(item[0]);
-          var title = $('h2').text();
+          var title = $('h2', '.title').text();
+          var time = Date.parse(($('span', '.title').text()).match(/\d{4}(\/)\d{2}\1\d{2}/)[0].replace(/\//g, '-'));
+          var tag = $('a', '.centerrighthead').eq(1).text();
           var content = $('.Newstxt').html();
           var cover = $('img', '.Newstxt').attr('src') === undefined ? 'http://www.hpu.edu.cn/www/upload/2015/5/2295835501.jpg' : $('img', '.Newstxt').attr('src');
+          var url = item[1];
 
           items.push({
             title: title,
+            time: time,
+            tag: tag,
             content: content,
             cover: cover,
-            url: item[1]
+            url: url
           });
+          // // 持久化数据
+          var s = new Logistics({
+            title: title,
+            time: time,
+            tag: tag,
+            content: content,
+            cover: cover,
+            url: url
+          }).save();
+
         }, function(err) {
           if (err) {
             return next(err);
