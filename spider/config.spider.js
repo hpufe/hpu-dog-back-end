@@ -33,7 +33,42 @@ var spiderConfig = {
    */
   logistics: {
     baseUrl: 'http://repair.hpu.edu.cn/',
-    url: 'http://repair.hpu.edu.cn/dsh/Pchome/GetNewsListbySub?RowCount=0&PageIndex=1&PageSize=15&LgType=1&PID=01'
+    url: 'http://repair.hpu.edu.cn/dsh/Pchome/GetNewsListbySub?RowCount=0&PageIndex=1&PageSize=15&LgType=1&PID=01',
+    headers: {
+        Accept: '*/*',
+        Origin: 'http://repair.hpu.edu.cn/',
+        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/53.0.2785.143 Chrome/53.0.2785.143 Safari/537.36',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        DNT: 1,
+        Referer: 'http://repair.hpu.edu.cn/dsh',
+        'Accept-Encoding': 'gzip, deflate',
+        'Accept-Language': 'en-US,en;q=0.8,zh;q=0.6'
+    }
+  },
+  /**
+   * 招聘
+   * @type {Object}
+   */
+  job: {
+    baseUrl: 'http://job.hpu.edu.cn/',
+    urls: [
+      'http://job.hpu.edu.cn/index.php/Employinfo/schoolin',
+      'http://job.hpu.edu.cn/index.php/Employinfo/schoolin?&page=2',
+      'http://job.hpu.edu.cn/index.php/Employinfo/xuanjianghui',
+      'http://job.hpu.edu.cn/index.php/Employinfo/xuanjianghui?&page=2',
+      'http://job.hpu.edu.cn/index.php/Employinfo/schoolout',
+      'http://job.hpu.edu.cn/index.php/Employinfo/pubandselect'
+    ],
+    headers: {
+        Accept: '*/*',
+        Origin: 'http://job.hpu.edu.cn/',
+        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/53.0.2785.143 Chrome/53.0.2785.143 Safari/537.36',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        DNT: 1,
+        Referer: 'http://job.hpu.edu.cn/index.php/Employinfo/index',
+        'Accept-Encoding': 'gzip, deflate, sdch',
+        'Accept-Language': 'en-US,en;q=0.8,zh;q=0.6'
+    }
   }
 
 }

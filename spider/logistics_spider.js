@@ -13,6 +13,7 @@ var getItems = function(req, res, next) {
 
   superagent
     .get(spiderConfig.logistics.url)
+    .set(spiderConfig.logistics.headers)
     .end(function(err, sres) {
       if (err) {
         return next(err);
@@ -26,6 +27,7 @@ var getItems = function(req, res, next) {
       async.mapLimit(urls, 3, function(item, cb) {
         superagent
           .get(item)
+          .set(spiderConfig.logistics.headers)
           .end(function(err, sres) {
             if (err) {
               return next(err);

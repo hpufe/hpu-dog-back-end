@@ -1,6 +1,3 @@
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://127.0.0.1:27017/hpuDog');
-
 var spiderConfig = require('./config.spider');
 var News = require('./models/news_model');
 var querystring = require('querystring');
