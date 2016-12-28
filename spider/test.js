@@ -19,15 +19,17 @@ var headers = {
 }
 
 var url = 'https://vpn.hpu.edu.cn/por/login_psw.csp';
-var noticeUrl = 'https://vpn.hpu.edu.cn/web/1/http/2/218.196.240.155/swfweb/hpugg.aspx?text=&page=1';
-var pars = 'svpn_name=311509040120&svpn_password=7797f7fbf7339c5d12799b6591975cfc6e253f0c15403fb494120de83fc04403a5eda00d71223ffd549a4c89408defc2ebf41f1c6c355d3ad8b5da77a16db52609eec5e7b0b394d6efc33dce104dea2ea86dab9f059e171d530a880e23a932117ce5fbfd6f087b2e5cd6d7539943c7c2a4695a6eba4da8a5d3859967c5832e93';
+var noticeUrl =
+  'https://vpn.hpu.edu.cn/web/1/http/2/218.196.240.155/swfweb/hpugg.aspx?text=&page=1';
+var pars =
+  'svpn_name=311509040120&svpn_password=7797f7fbf7339c5d12799b6591975cfc6e253f0c15403fb494120de83fc04403a5eda00d71223ffd549a4c89408defc2ebf41f1c6c355d3ad8b5da77a16db52609eec5e7b0b394d6efc33dce104dea2ea86dab9f059e171d530a880e23a932117ce5fbfd6f087b2e5cd6d7539943c7c2a4695a6eba4da8a5d3859967c5832e93';
 
-var test = function(req, res, next) {
+var test = function (req, res, next) {
   // 获取vpn登陆动态表单地址
   superagent
     .get(url)
     .set(headers)
-    .end(function(err, res1) {
+    .end(function (err, res1) {
       if (err) {
         return next(err);
       }
@@ -35,7 +37,8 @@ var test = function(req, res, next) {
       console.log(cookie1);
 
       var $ = cheerio.load(res1.text);
-      var action = 'https://vpn.hpu.edu.cn/por/' + $('form').attr('action') + '&encrypt=1';
+      var action = 'https://vpn.hpu.edu.cn/por/' + $('form').attr('action') +
+        '&encrypt=1';
       headers.Referer = action;
       // 登陆vpn
       superagent
@@ -44,25 +47,12 @@ var test = function(req, res, next) {
         .set(headers)
         .set('Cookie', cookie1[0])
         .redirects()
-        .end(function(err, res2) {
+        .end(function (err, res2) {
           if (err) {
             return next(err);
           }
           res.send(res2.text);
-          // var cookie2 = res2.headers['set-cookie'];
-          // console.log(cookie2);
-          // // 获取最新公告
-          // superagent
-          //   .get(noticeUrl)
-          //   .set(headers)
-          //   .set('Cookie', cookie2[0])
-          //   .redirects(5)
-          //   .end(function(err, res3) {
-          //     if (err) {
-          //       return next(err);
-          //     }
-          //     res.send(res3.text);
-          //   })
+
         });
     });
 
