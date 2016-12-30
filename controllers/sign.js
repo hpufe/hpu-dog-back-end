@@ -1,3 +1,5 @@
+var User = require('../models/user');
+
 var validator = require('validator');
 
 /**
@@ -43,7 +45,13 @@ exports.signup = function (req, res, next) {
     return;
   }
 
-  res.send('user ok! ' + email + userName);
+  var s = new User({
+    userName: userName,
+    email: email,
+    pass: pass
+  }).save();
+
+  res.send('add user ok! ' + userName);
 }
 
 /**
@@ -54,7 +62,44 @@ exports.signup = function (req, res, next) {
  * @return {[type]}
  */
 exports.signin = function (req, res, next) {
-  res.send('signin');
+  var userName = validator.trim(req.body.userName).toLowerCase();
+  var pass = validator.trim(req.body.pass);
+
+  if ([userName, pass].some(function (item) {
+      return item === '';
+    })) {
+    res.status(422).json({
+      err: '信息不完整'
+    });
+    return;
+  }
+  // 用户名合法验证
+  if (userName.length < 3) {
+    res.status(422).json({
+      err: '用户名至少需要5个字符'
+    });
+    return;
+  }
+
+  User.findOne({
+    userName: userName
+  }, function (err, user) {
+    if (err) {
+      return next(err);
+    }
+
+    user.comparePass(pass, function (err, isMatch) {
+      if (isMatch) {
+        res.json({
+          user: userName
+        });
+      } else {
+        res.status(422).json({
+          err: '登陆失败'
+        });
+      }
+    });
+  });
 }
 
 /**
