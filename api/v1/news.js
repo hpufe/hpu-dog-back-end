@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var News = require('../../spider/models/news_model');
 
-var show = function(req, res, next) {
+var show = function (req, res, next) {
   var limit = req.query.limit;
   var skip = req.query.skip;
 
@@ -9,14 +9,18 @@ var show = function(req, res, next) {
     var options = {
       limit: +limit,
       skip: skip === '' ? 0 : +skip,
-      sort: {time: -1}
+      sort: {
+        time: -1
+      }
     };
 
-    News.find({}, null, options, function(err, sres) {
+    News.find({}, null, options, function (err, sres) {
       res.jsonp(sres);
     });
   } else {
-    res.status(400).jsonp({err: 'params err!'});
+    res.status(400).jsonp({
+      err: 'params err!'
+    });
   }
 }
 

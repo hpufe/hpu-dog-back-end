@@ -24,7 +24,12 @@
   },
   "description": "HPU二狗后端",
   "main": "app.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-concurrent": "^2.3.1",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-nodemon": "^0.4.2"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jeneser/hpu-dog-back-end.git"
