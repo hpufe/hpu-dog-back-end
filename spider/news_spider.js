@@ -1,5 +1,5 @@
 var spiderConfig = require('./config.spider');
-var News = require('./models/news_model');
+var News = require('../models/news_model');
 var querystring = require('querystring');
 var superagent = require('superagent');
 var charset = require('superagent-charset');
@@ -16,18 +16,18 @@ var news = [];
  * @param  {Function} cb   回调
  * @return {Error}        错误处理
  */
-var getHtml = function(item, cb) {
+var getHtml = function (item, cb) {
   superagent
-  .post(spiderConfig.news.baseUrl)
-  .send(querystring.parse(item))
-  .set(spiderConfig.news.headers)
-  .end(function(err, sres) {
-    if (err) {
-      return next(err);
-    }
-    cb(null, sres.text);
-    console.log('urls ok!');
-  })
+    .post(spiderConfig.news.baseUrl)
+    .send(querystring.parse(item))
+    .set(spiderConfig.news.headers)
+    .end(function (err, sres) {
+      if (err) {
+        return next(err);
+      }
+      cb(null, sres.text);
+      console.log('urls ok!');
+    })
 }
 
 /**
@@ -35,16 +35,16 @@ var getHtml = function(item, cb) {
  * @param  {Array} result html集合
  * @return {Error}        错误处理
  */
-var getUrls = function(result) {
-  async.each(result, function(item, cb) {
+var getUrls = function (result) {
+  async.each(result, function (item, cb) {
     var $ = cheerio.load(item);
-    $('a').each(function(i, elem){
+    $('a').each(function (i, elem) {
       if ($(this).attr('onclick') === undefined) {
         urls.push($(this).attr('href'));
       }
     });
     cb(null);
-  }, function(err) {
+  }, function (err) {
     if (err) {
       return next(err);
     }
@@ -57,12 +57,12 @@ var getUrls = function(result) {
  * @param  {Function} cb   回调
  * @return {Error}        错误处理
  */
-var getContent = function(item, cb) {
+var getContent = function (item, cb) {
   superagent
     .get(item)
     .charset('gbk')
     .set(spiderConfig.news.headers)
-    .end(function(err, sres) {
+    .end(function (err, sres) {
       if (err) {
         return next(err);
       }
@@ -77,29 +77,30 @@ var getContent = function(item, cb) {
  * @param  {Function} cb   回调
  * @return {Error}        错误处理
  */
-var saveItem = function(item, cb) {
+var saveItem = function (item, cb) {
   var $ = cheerio.load(item[0]);
-  var html = $('td', '#body').filter(function(i, ele) {
+  var html = $('td', '#body').filter(function (i, ele) {
     return $(this).attr('align') === 'left';
   });
 
   var title = $('.NewsTitle', html).text();
-  var time = Date.parse(($('tr', html).eq(2).text()).match(/\d{4}(-)\d{2}\1\d{2}/)[0]);
+  var time = Date.parse(($('tr', html).eq(2).text()).match(
+    /\d{4}(-)\d{2}\1\d{2}/)[0]);
   var tag = $('a', html).eq(1).text();
   var content = $('#NewsContent', html).html();
-  var cover = $('img', html).attr('src') === undefined ? 'http://www.hpu.edu.cn/www/upload/2015/5/2295835501.jpg' : $('img', html).attr('src');
+  var cover = $('img', html).attr('src') === undefined ?
+    'http://www.hpu.edu.cn/www/upload/2015/5/2295835501.jpg' : $('img', html)
+    .attr('src');
   var link = item[1];
 
-  news.push(
-    {
-      title: title,
-      time: time,
-      tag: tag,
-      content: content,
-      cover: cover,
-      url: link
-    }
-  );
+  news.push({
+    title: title,
+    time: time,
+    tag: tag,
+    content: content,
+    cover: cover,
+    url: link
+  });
 
   var n = new News({
     title: title,
@@ -113,27 +114,27 @@ var saveItem = function(item, cb) {
   cb(null);
 }
 
-var getNews = function(req, res, next) {
+var getNews = function (req, res, next) {
 
-  async.map(spiderConfig.news.pars, function(item, cb){
+  async.map(spiderConfig.news.pars, function (item, cb) {
     getHtml(item, cb);
-  }, function(err, result){
+  }, function (err, result) {
     if (err) {
       return next(err);
     }
     getUrls(result);
 
-    async.mapLimit(urls, 3, function(item, cb) {
+    async.mapLimit(urls, 3, function (item, cb) {
       getContent(item, cb);
-    }, function(err, result) {
+    }, function (err, result) {
       if (err) {
         return next(err);
       }
 
-      async.each(result, function(item, cb) {
+      async.each(result, function (item, cb) {
         saveItem(item, cb);
         console.log('saved ok!');
-      }, function(err) {
+      }, function (err) {
         if (err) {
           return next(err);
         }

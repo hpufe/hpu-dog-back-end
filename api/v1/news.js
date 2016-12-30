@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var News = require('../../spider/models/news_model');
+var News = require('../../models/news_model');
 
 var show = function (req, res, next) {
   var limit = req.query.limit;
