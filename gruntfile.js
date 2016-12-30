@@ -9,7 +9,9 @@ module.exports = function (grunt) {
         }
       },
       js: {
-        files: ['routes/*.js', 'spider/**/*.js', 'api/v1/*.js', 'app.js'],
+        files: ['routes/*.js', 'models/*.js', 'controllers/*.js',
+          'spider/*.js', 'api/v1/*.js', 'app.js'
+        ],
         options: {
           livereload: true
         }

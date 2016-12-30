@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
-var Job = require('../models/job_model');
+var Job = require('../models/job');
 
-var spiderConfig = require('./config.spider');
+var spiderConfig = require('./config');
 var superagent = require('superagent');
 var cheerio = require('cheerio');
 var async = require('async');

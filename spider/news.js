@@ -1,5 +1,5 @@
-var spiderConfig = require('./config.spider');
-var News = require('../models/news_model');
+var spiderConfig = require('./config');
+var News = require('../models/news');
 var querystring = require('querystring');
 var superagent = require('superagent');
 var charset = require('superagent-charset');
