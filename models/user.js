@@ -11,6 +11,7 @@ var userSchema = new Schema({
   },
   pass: String,
   email: String,
+  token: String,
   createAt: {
     type: Date,
     default: Date.now()
