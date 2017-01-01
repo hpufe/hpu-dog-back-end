@@ -69,7 +69,8 @@ exports.signup = function (req, res, next) {
     } else {
       // 生成token
       var token = jwt.sign({
-        userName: userName
+        userName: userName,
+        role: 0
       }, config.authentication.privateKey);
 
       var userModel = new User({
