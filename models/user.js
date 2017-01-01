@@ -11,6 +11,48 @@ var userSchema = new Schema({
   },
   pass: String,
   email: String,
+
+  avatar: {
+    type: String,
+    default: 'img/avatar.png'
+  },
+  realName: {
+    type: String,
+    default: '未完善'
+  },
+  phoneNum: {
+    type: Number,
+    default: 0
+  },
+  qq: {
+    type: Number,
+    default: 0
+  },
+
+  role: {
+    type: Number,
+    default: 0
+  },
+  score: {
+    type: Number,
+    default: 0
+  },
+
+  studentNum: {
+    type: Number,
+    default: 0
+  },
+  vpnPass: {
+    type: Number,
+    default: 0
+  },
+  jwcPass: {
+    type: Number,
+    default: 0
+  },
+  timeTable: String,
+  studentScore: String,
+
   token: String,
   createAt: {
     type: Date,

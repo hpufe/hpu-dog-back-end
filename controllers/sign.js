@@ -8,7 +8,6 @@ var jwt = require('jsonwebtoken');
  * @param  {HttpRequest}   req
  * @param  {HttpResponse}   res
  * @param  {Function} next
- * @return {[type]}
  */
 exports.signup = function (req, res, next) {
   var userName = validator.trim(req.body.userName).toLowerCase();
@@ -92,11 +91,10 @@ exports.signup = function (req, res, next) {
 }
 
 /**
- * 登陆
+ * 登陆授权
  * @param  {HttpRequest}   req
  * @param  {HttpResponse}   res
  * @param  {Function} next
- * @return {[type]}
  */
 exports.signin = function (req, res, next) {
   var userName = validator.trim(req.body.userName).toLowerCase();
