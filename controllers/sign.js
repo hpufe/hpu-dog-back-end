@@ -1,5 +1,5 @@
 var User = require('../models/user');
-
+var config = require('../config');
 var validator = require('validator');
 var jwt = require('jsonwebtoken');
 
@@ -68,23 +68,25 @@ exports.signup = function (req, res, next) {
       });
       return;
     } else {
-
+      // 生成token
       var token = jwt.sign({
-        userName: userName,
-        pass: pass
-      }, 'abcd');
-      var userModel = new User({
-        userName: userName,
-        email: email,
-        pass: pass,
-        token: token
-      }).save();
+        userName: userName
+      }, config.authentication.privateKey);
 
-      res.json({
-        mesg: '注册成功',
-        user: userName,
-        token: token
-      });
+      var userModel = new User({
+          userName: userName,
+          email: email,
+          pass: pass,
+          token: token
+        })
+        .save()
+        .then(function (val) {
+          res.json({
+            mesg: '注册成功',
+            user: userName,
+            token: token
+          });
+        });
     }
   });
 }
@@ -134,12 +136,13 @@ exports.signin = function (req, res, next) {
       if (isMatch) {
         res.json({
           type: true,
-          user: user,
+          user: user.userName,
           token: user.token
         });
       } else {
         res.status(422).json({
-          err: '登陆失败'
+          type: false,
+          mesg: '登陆失败'
         });
       }
     });

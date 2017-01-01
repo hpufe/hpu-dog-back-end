@@ -1,9 +1,6 @@
 var express = require('express');
 var router = express.Router();
 
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://127.0.0.1:27017/hpuDog');
-
 var newsController = require('../spider/news');
 var logisticsController = require('../spider/logistics');
 var jobController = require('../spider/job');
