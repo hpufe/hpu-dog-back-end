@@ -1,39 +1,15 @@
 var express = require('express');
 var router = express.Router();
 
+var auth = require('../middlewares/auth');
 var signController = require('../controllers/sign');
 
-router.use(function (req, res, next) {
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
-  res.setHeader('Access-Control-Allow-Headers',
-    'X-Requested-With,content-type, Authorization');
-  next();
-});
-
-function ensureAuthorized(req, res, next) {
-  var bearerToken;
-  var bearerHeader = req.headers["authorization"];
-  if (typeof bearerHeader !== 'undefined') {
-    var bearer = bearerHeader.split(" ");
-    bearerToken = bearer[1];
-    req.token = bearerToken;
-    next();
-  } else {
-    res.status(403).json({
-      err: '没有访问权限'
-    });
-  }
-};
-
-// 注册
+// 用户
 router.post('/signup', signController.signup);
-// 登陆
 router.post('/signin', signController.signin);
-// 登出
-router.get('/signout', signController.signout);
 
 // 个人信息
-router.get('/me', ensureAuthorized, function (req, res, next) {
+router.get('/me', auth.ensureAuthorized, function (req, res, next) {
   var token = req.token;
   res.send(token);
 })

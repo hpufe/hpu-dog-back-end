@@ -29,6 +29,13 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// set header
+app.use(function (req, res, next) {
+  res.setHeader('Access-Control-Allow-Headers',
+    'X-Requested-With,content-type, Authorization');
+  next();
+});
+
 app.use('/', index);
 app.use('/user', user);
 app.use('/spider', spider);

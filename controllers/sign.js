@@ -148,14 +148,3 @@ exports.signin = function (req, res, next) {
     });
   });
 }
-
-/**
- * 登出
- * @param  {HttpRequest}   req
- * @param  {HttpResponse}   res
- * @param  {Function} next
- * @return {[type]}
- */
-exports.signout = function (req, res, next) {
-  res.send('signout');
-}
