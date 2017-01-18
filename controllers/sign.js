@@ -20,35 +20,35 @@ exports.signup = function (req, res, next) {
       return item === '';
     })) {
     res.status(422).json({
-      err: '信息不完整'
+      msg: '信息不完整'
     });
     return;
   }
 
   if (userName.length < 3) {
     res.status(422).json({
-      err: '用户名至少需要5个字符'
+      msg: '用户名至少需要3个字符'
     });
     return;
   }
 
   if (!(/^([a-zA-Z0-9\-_]|[\u4e00-\u9fa5])+$/i).test(userName)) {
     res.status(422).json({
-      err: '用户名不合法'
+      msg: '用户名不合法'
     });
     return;
   }
 
   if (!validator.isEmail(email)) {
     res.status(422).json({
-      err: '请填写正确的邮箱'
+      msg: '请填写正确的邮箱'
     });
     return;
   }
 
   if (pass !== repass) {
     res.status(422).json({
-      err: '两次输入密码不一致'
+      msg: '两次输入密码不一致'
     });
     return;
   }
@@ -63,7 +63,7 @@ exports.signup = function (req, res, next) {
 
     if (user) {
       res.status(422).json({
-        err: '用户名已存在'
+        msg: '用户名已存在'
       });
       return;
     } else {
@@ -82,7 +82,7 @@ exports.signup = function (req, res, next) {
         .save()
         .then(function (val) {
           res.json({
-            mesg: '注册成功',
+            msg: '注册成功',
             user: userName,
             token: token
           });
@@ -105,21 +105,21 @@ exports.signin = function (req, res, next) {
       return item === '';
     })) {
     res.status(422).json({
-      err: '信息不完整'
+      msg: '信息不完整'
     });
     return;
   }
 
   if (userName.length < 3) {
     res.status(422).json({
-      err: '用户名至少需要5个字符'
+      msg: '用户名至少需要5个字符'
     });
     return;
   }
 
   if (!(/^([a-zA-Z0-9\-_]|[\u4e00-\u9fa5])+$/i).test(userName)) {
     res.status(422).json({
-      err: '用户名不合法'
+      msg: '用户名不合法'
     });
     return;
   }
@@ -141,7 +141,7 @@ exports.signin = function (req, res, next) {
       } else {
         res.status(422).json({
           type: false,
-          mesg: '登陆失败'
+          msg: '登陆失败'
         });
       }
     });

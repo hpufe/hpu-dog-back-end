@@ -5,7 +5,7 @@ module.exports = function (grunt) {
       jade: {
         files: ['views/**'],
         options: {
-          livereload: true
+          // livereload: true
         }
       },
       js: {
@@ -13,7 +13,7 @@ module.exports = function (grunt) {
           'spider/*.js', 'api/v1/*.js', 'app.js'
         ],
         options: {
-          livereload: true
+          // livereload: true
         }
       }
     },
@@ -29,7 +29,7 @@ module.exports = function (grunt) {
           debug: true,
           delayTime: 1,
           env: {
-            PORT: 3000
+            PORT: 4000
           },
           cwd: __dirname
         }
