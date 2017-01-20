@@ -44,7 +44,7 @@ var getItems = function (req, res, next) {
           var $ = cheerio.load(item[0]);
           var title = $('h2', '.title').text();
           var time = Date.parse(($('span', '.title').text()).match(
-            /\d{4}(\/)\d{2}\1\d{2}/)[0].replace(/\//g, '-'));
+            /\d{4}(\/)\d{1,2}\1\d{1,2}/)[0].replace(/\//g, '-'));
           var tag = $('a', '.centerrighthead').eq(1).text();
           var content = $('.Newstxt').html();
           var cover = $('img', '.Newstxt').attr('src') ===
