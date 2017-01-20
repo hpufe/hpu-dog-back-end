@@ -1,6 +1,6 @@
-var logistics = require('../../models/logistics');
+var Logistics = require('../../models/logistics');
 
-var show = function (req, res, next) {
+var showList = function (req, res, next) {
   var limit = req.query.limit;
   var skip = req.query.skip;
 
@@ -13,7 +13,7 @@ var show = function (req, res, next) {
       }
     };
 
-    logistics.find({}, null, options, function (err, sres) {
+    Logistics.find({}, null, options, function (err, sres) {
       res.jsonp(sres);
     });
   } else {
@@ -23,4 +23,24 @@ var show = function (req, res, next) {
   }
 }
 
-exports.show = show;
+exports.showList = showList;
+
+var showContent = function (req, res, next) {
+  var id = req.params.id;
+
+  if (id.length === 24 && new RegExp(/[a-z0-9]+/).test(id)) {
+
+    Logistics.findById(id, function (err, sres) {
+      if (err) {
+        return next(err);
+      }
+      res.jsonp(sres);
+    });
+  } else {
+    res.status(400).jsonp({
+      err: 'params err!'
+    });
+  }
+}
+
+exports.showContent = showContent;

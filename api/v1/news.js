@@ -1,6 +1,6 @@
 var News = require('../../models/news');
 
-var show = function (req, res, next) {
+var showList = function (req, res, next) {
   var limit = req.query.limit;
   var skip = req.query.skip;
 
@@ -23,4 +23,24 @@ var show = function (req, res, next) {
   }
 }
 
-exports.show = show;
+exports.showList = showList;
+
+var showContent = function (req, res, next) {
+  var id = req.params.id;
+
+  if (id.length === 24 && new RegExp(/[a-z0-9]+/).test(id)) {
+
+    News.findById(id, function (err, sres) {
+      if (err) {
+        return next(err);
+      }
+      res.jsonp(sres);
+    });
+  } else {
+    res.status(400).jsonp({
+      err: 'params err!'
+    });
+  }
+}
+
+exports.showContent = showContent;

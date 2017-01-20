@@ -12,8 +12,13 @@ router.get('/', function (req, res, next) {
   });
 });
 
-router.get('/news', newsController.show);
-router.get('/job', jobController.show);
-router.get('/logistics', logisticsController.show);
+router.get('/news', newsController.showList);
+router.get('/news/:id', newsController.showContent);
+
+router.get('/job', jobController.showList);
+router.get('/job/:id', jobController.showContent);
+
+router.get('/logistics', logisticsController.showList);
+router.get('/logistics/:id', logisticsController.showContent);
 
 module.exports = router;
