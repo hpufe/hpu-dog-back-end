@@ -1,4 +1,4 @@
-var News = require('../../models/news');
+var Job = require('../../models/job');
 
 var show = function (req, res, next) {
   var limit = req.query.limit;
@@ -13,7 +13,7 @@ var show = function (req, res, next) {
       }
     };
 
-    News.find({}, null, options, function (err, sres) {
+    Job.find({}, null, options, function (err, sres) {
       res.jsonp(sres);
     });
   } else {
